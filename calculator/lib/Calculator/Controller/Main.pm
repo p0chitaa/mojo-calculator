@@ -1,15 +1,15 @@
-#!/usr/bin/env perl
-use Mojolicious::Lite -signatures;
+package Calculator::Controller::Main;
+use Mojo::Base 'Mojolicious::Controller', -signatures;
 
-any '/' => sub ($c) {
-    my $result = 0;
-    $c->render(template => 'calc', result => $result);
-};
+sub calculator {
+  my $self = shift;
+  $self->render('calculator');
+}
 
-any '/calculate' => sub {
-    my $c = shift;
+sub calculate {
+    my $self = shift;
 
-    my $data = $c->req->json;
+    my $data = $self->req->json;
     my $num1 = $data->{num1};
     my $num2 = $data->{num2};
     my $operator = $data->{operator};
@@ -27,7 +27,7 @@ any '/calculate' => sub {
         $result = $num1 % $num2;
     }
 
-    $c->render(json => { num1 => $num1, num2 => $num2, operator => $operator, result => $result });
-};
+    $self->render(json => { num1 => $num1, num2 => $num2, operator => $operator, result => $result });
+}
 
-app->start;
+1;
