@@ -10,11 +10,20 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 <style>
+    html, body {
+        height: 100%;
+    }
+
     body {
         background-color: rgba(20, 20, 20);
     }
+
+    .wrapper {
+    }
+
     #calculator {
         /*margin: auto;*/
+        position: relative;
         overflow: visible;
         max-width: 460px;
         height: 70%;
@@ -136,41 +145,63 @@
     #operator:active {
         background-color: rgba(255, 230, 0);
     }
+
+    .history {
+        position: absolute;
+        top: 0;
+        left: 500;
+        padding: 3px;
+        font-family: 'Inter', sans-serif;
+        font-size: 2rem;
+        color: rgba(240, 240, 240, 0.7);
+    }
+
+    @media (max-width: 958px) {
+        .history {
+            position: relative;
+            left: 0;
+        }
+    }    
 </style>
 <body>
-    <div id="calculator">
-        <div id="results-box">
-            <!--<p id="results"></p>-->
+    <div class="wrapper">
+        <div id="calculator">
+            <div id="results-box">
+                <!--<p id="results"></p>-->
 
-            <!-- rename to first-num and second-num!!! -->
-            <p id="first-results">{{ currentNum }}</p>
-            <p id="second-results">0</p>
+                <!-- rename to first-num and second-num!!! -->
+                <p id="first-results">{{ currentNum }}</p>
+                <p id="second-results">0</p>
+            </div>
+            <div id="number-grid">
+                <button @click="onOperatorClick('//')" type="submit" class="calc-button" value="/" id="operator"
+                    style="grid-area: 1 / 4;font-size:2.5rem;">÷</button>
+                <button @click="onOperatorClick('*')" type="submit" class="calc-button" value="*" id="operator"
+                    style="grid-area: 2 / 4;font-size:2.5rem;">x</button>
+                <button @click="onOperatorClick('-')" type="submit" class="calc-button" value="-" id="operator"
+                    style="grid-area: 3 / 4;">-</button>
+                <button @click="onOperatorClick('+')" type="submit" class="calc-button" value="+" id="operator"
+                    style="grid-area: 4 / 4;">+</button>
+                <button @click="onEquals" type="submit" class="calc-button" value="=" id="operator"
+                    style="grid-area: 5 / 4;font-size:2.5rem;">=</button>
+                <button @click="onClearClick" type="submit" id="C" class="calc-button" value="C">C</button>
+                <button type="submit" id="negate" class="calc-button" value="negate" style="font-size:1.75rem;">+/-</button>
+                <button @click="onOperatorClick('%')" type="submit" id="mod" class="calc-button" value="%" style="font-size:2.2rem;">%</button>
+                <button @click="onNumClick('7')" type="submit" id="7" class="calc-button" value="7">7</button>
+                <button @click="onNumClick('8')" type="submit" id="8" class="calc-button" value="8">8</button>
+                <button @click="onNumClick('9')" type="submit" id="9" class="calc-button" value="9">9</button>  
+                <button @click="onNumClick('4')" type="submit" id="4" class="calc-button" value="4">4</button>
+                <button @click="onNumClick('5')" type="submit" id="5" class="calc-button" value="5">5</button>
+                <button @click="onNumClick('6')" type="submit" id="6" class="calc-button" value="6">6</button>  
+                <button @click="onNumClick('1')" type="submit" id="1" class="calc-button" value="1">1</button>
+                <button @click="onNumClick('2')" type="submit" id="2" class="calc-button" value="2">2</button>
+                <button @click="onNumClick('3')" type="submit" id="3" class="calc-button" value="3">3</button>  
+                <button @click="onNumClick('0')" type="submit" id="zero-button" value="0">0</button>
+                <button @click="onNumClick('.')" type="submit" id="dot" value=".">.</button>
+            </div>
         </div>
-        <div id="number-grid">
-            <button @click="onOperatorClick('//')" type="submit" class="calc-button" value="/" id="operator"
-                style="grid-area: 1 / 4;font-size:2.5rem;">÷</button>
-            <button @click="onOperatorClick('*')" type="submit" class="calc-button" value="*" id="operator"
-                style="grid-area: 2 / 4;font-size:2.5rem;">x</button>
-            <button @click="onOperatorClick('-')" type="submit" class="calc-button" value="-" id="operator"
-                style="grid-area: 3 / 4;">-</button>
-            <button @click="onOperatorClick('+')" type="submit" class="calc-button" value="+" id="operator"
-                style="grid-area: 4 / 4;">+</button>
-            <button @click="onEquals" type="submit" class="calc-button" value="=" id="operator"
-                style="grid-area: 5 / 4;font-size:2.5rem;">=</button>
-            <button @click="onClearClick" type="submit" id="C" class="calc-button" value="C">C</button>
-            <button type="submit" id="negate" class="calc-button" value="negate" style="font-size:1.75rem;">+/-</button>
-            <button @click="onOperatorClick('%')" type="submit" id="mod" class="calc-button" value="%" style="font-size:2.2rem;">%</button>
-            <button @click="onNumClick('7')" type="submit" id="7" class="calc-button" value="7">7</button>
-            <button @click="onNumClick('8')" type="submit" id="8" class="calc-button" value="8">8</button>
-            <button @click="onNumClick('9')" type="submit" id="9" class="calc-button" value="9">9</button>  
-            <button @click="onNumClick('4')" type="submit" id="4" class="calc-button" value="4">4</button>
-            <button @click="onNumClick('5')" type="submit" id="5" class="calc-button" value="5">5</button>
-            <button @click="onNumClick('6')" type="submit" id="6" class="calc-button" value="6">6</button>  
-            <button @click="onNumClick('1')" type="submit" id="1" class="calc-button" value="1">1</button>
-            <button @click="onNumClick('2')" type="submit" id="2" class="calc-button" value="2">2</button>
-            <button @click="onNumClick('3')" type="submit" id="3" class="calc-button" value="3">3</button>  
-            <button @click="onNumClick('0')" type="submit" id="zero-button" value="0">0</button>
-            <button @click="onNumClick('.')" type="submit" id="dot" value=".">.</button>
+        <div class="history">
+            <p>History</p>
         </div>
     </div>
     <script>
