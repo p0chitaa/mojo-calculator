@@ -3,9 +3,16 @@
 use strict;
 use warnings;
 
-use Mojo::File qw(curfile);
-use lib curfile->dirname->sibling('lib')->to_string;
+# use Mojo::File qw(curfile);
+# use lib curfile->dirname->sibling('lib')->to_string;
+
+use FindBin;
+FindBin::again();
+BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
+
+# use lib 'lib';
 use Mojolicious::Commands;
 
 # Start command line interface for application
+# require Mojolicious::Commands;
 Mojolicious::Commands->start_app('Calculator');

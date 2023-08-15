@@ -19,6 +19,9 @@
     }
 
     .wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
     }
 
     #calculator {
@@ -35,7 +38,7 @@
         padding: 20px;
         width: 90%;
         background-color: rgba(50, 50, 50, 0.8);
-        height: 10%;
+        height: 65px;
         border-radius: 200px;
     }
 
@@ -51,8 +54,9 @@
 
     #second-results {
         margin: auto;
+        position: relative;
         margin-right: 20px;
-        color: white;
+        color: rgba(50, 50, 50, 0.8);
         display: flex;
         justify-content: flex-end;
         font-size: 3.5rem;
@@ -154,6 +158,7 @@
         font-family: 'Inter', sans-serif;
         font-size: 2rem;
         color: rgba(240, 240, 240, 0.7);
+        white-space: pre;
     }
 
     @media (max-width: 958px) {
@@ -199,13 +204,14 @@
                 <button @click="onNumClick('0')" type="submit" id="zero-button" value="0">0</button>
                 <button @click="onNumClick('.')" type="submit" id="dot" value=".">.</button>
             </div>
-        </div>
-        <div class="history">
-            <p>History</p>
+            <div class="history">
+                <h4 style="margin-bottom:-40px;color:rgba(240, 240, 240, 0.4);">History:</h4>
+                <p>{{ historyDisplay }}</p>
+            </div>
         </div>
     </div>
     <script>
-        new Vue({
+        new Vue({  
             el: '#calculator',
             data: {
                 currentNum: "",
@@ -214,8 +220,40 @@
                 operator: '',
                 onSecondNum: false,
                 equalsApiCalled: false,
+                history: {},
+                historyDisplay: "",
+            },
+            mounted() {
+                axios.get('/history')
+                    .then(response => {
+                          this.history = response.data
+                          console.log(this.history)
+                          for (const property in this.history) {
+                              let num1 = this.history[property].Num1
+                              let num2 = this.history[property].Num2
+                              let operator = this.history[property].Operator
+                              let result = this.history[property].Result
+                              this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                          }
+                          console.log(this.historyDisplay)
+                    })
             },
             methods: {
+                getHistory() {
+                    axios.get('/history')
+                        .then(response => {
+                            this.history = response.data
+                            console.log(this.history)
+                            for (const property in this.history) {
+                                let num1 = this.history[property].Num1
+                                let num2 = this.history[property].Num2
+                                let operator = this.history[property].Operator
+                                let result = this.history[property].Result
+                                this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                            }
+                            console.log(this.historyDisplay)
+                          })
+                },
                 onNumClick(e) {
                     let num = this.currentNum.concat(e)
                     this.currentNum = num
@@ -257,8 +295,34 @@
                         console.log("Operator: ", this.operator)
                         console.log("On Second Num: ", this.onSecondNum)
                         console.log("Equals Api Called: ", this.equalsApiCalled)
+                        const requestData = {
+                            num1: this.num1,
+                            num2: this.num2,
+                            operator: this.operator
+                        }
+                        axios.post('/calculate', requestData)
+                            .then(response => {
+                                  console.log('API response:', response.data);
+                            })
+                            .catch(error => {
+                                  console.error('Error sending data:', error);
+                            });
+                        axios.get('/history')
+                            .then(response => {
+                                this.history = response.data
+                                console.log(this.history)
+                                for (const property in this.history) {
+                                    let num1 = this.history[property].Num1
+                                    let num2 = this.history[property].Num2
+                                    let operator = this.history[property].Operator
+                                    let result = this.history[property].Result
+                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                }
+                                console.log(this.historyDisplay)
+                            })
+
                     }
-                    const requestData = { 
+                    /*const requestData = { 
                         num1: this.num1,
                         num2: this.num2,
                         operator: this.operator
@@ -269,7 +333,7 @@
                         })
                         .catch(error => {
                             console.error('Error sending data:', error);
-                        });
+                        });*/
                     this.currentNum = ''
                 },
                 onClearClick() {
@@ -294,6 +358,19 @@
                                 .catch(error => {
                                     console.error('Error sending data:', error)
                                 });
+                            axios.get('/history')
+                                .then(response => {
+                                    this.history = response.data
+                                    console.log(this.history)
+                                    for (const property in this.history) {
+                                        let num1 = this.history[property].Num1
+                                        let num2 = this.history[property].Num2
+                                        let operator = this.history[property].Operator
+                                        let result = this.history[property].Result
+                                        this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                    }
+                                    console.log(this.historyDisplay)
+                                })
                             console.log("Num 1: ", this.num1)
                             console.log("Num 2: ", this.num2)
                             console.log("Operator: ", this.operator)
@@ -316,6 +393,19 @@
                                 .catch(error => {
                                     console.error('Error sending data:', error)
                                 });
+                            axios.get('/history')
+                                .then(response => {
+                                    this.history = response.data
+                                    console.log(this.history)
+                                    for (const property in this.history) {
+                                        let num1 = this.history[property].Num1
+                                        let num2 = this.history[property].Num2
+                                        let operator = this.history[property].Operator
+                                        let result = this.history[property].Result
+                                        this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                    }
+                                    console.log(this.historyDisplay)
+                                })
                             console.log("Num 1: ", this.num1)
                             console.log("Num 2: ", this.num2)
                             console.log("Operator: ", this.operator)
@@ -338,6 +428,19 @@
                                 .catch(error => {
                                     console.error('Error sending data:', error)
                                 });
+                            axios.get('/history')
+                                .then(response => {
+                                    this.history = response.data
+                                    console.log(this.history)
+                                    for (const property in this.history) {
+                                        let num1 = this.history[property].Num1
+                                        let num2 = this.history[property].Num2
+                                        let operator = this.history[property].Operator
+                                        let result = this.history[property].Result
+                                        this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                    }
+                                    console.log(this.historyDisplay)
+                                })
                             console.log("Num 1: ", this.num1)
                             console.log("Num 2: ", this.num2)
                             console.log("Operator: ", this.operator)
@@ -360,6 +463,19 @@
                                 .catch(error => {
                                     console.error('Error sending data:', error)
                                 });
+                            axios.get('/history')
+                                .then(response => {
+                                    this.history = response.data
+                                    console.log(this.history)
+                                    for (const property in this.history) {
+                                        let num1 = this.history[property].Num1
+                                        let num2 = this.history[property].Num2
+                                        let operator = this.history[property].Operator
+                                        let result = this.history[property].Result
+                                        this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                    }
+                                    console.log(this.historyDisplay)
+                                })
                             console.log("Num 1: ", this.num1)
                             console.log("Num 2: ", this.num2)
                             console.log("Operator: ", this.operator)
