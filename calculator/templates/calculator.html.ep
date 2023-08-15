@@ -217,13 +217,16 @@
                 currentNum: "",
                 num1: 0,
                 num2: 0,
+                nums: [],
+                currentNumCheck: false,
+                firstEquals: true,
                 operator: '',
-                onSecondNum: false,
-                equalsApiCalled: false,
+                operationCounter: 0,
+                response: {},
                 history: {},
                 historyDisplay: "",
             },
-            mounted() {
+            /*mounted() {
                 axios.get('/history')
                     .then(response => {
                           this.history = response.data
@@ -237,8 +240,123 @@
                           }
                           console.log(this.historyDisplay)
                     })
-            },
+            },*/
             methods: {
+                onNumClick(e) {
+                    if(this.currentNumCheck === false) {
+                        this.currentNum = this.currentNum.concat(e)
+                    } else {
+                        this.currentNum = ''
+                        this.currentNum = this.currentNum.concat(e)
+                        this.currentNumCheck = false
+                    }
+                },
+                onClearClick() {
+                    //location.reload()
+                    this.currentNum = ""
+                    this.num1 = 0
+                    this.num2 = 0
+                    this.nums = []
+                    this.currentNumCheck = false
+                    this.firstEquals = true
+                    this.operator = ''
+                    this.operationCounter = 0
+                    this.response = {}
+                },
+                onOperatorClick(e) {
+                    console.log(this.firstEquals)
+                    this.nums.push(Number(this.currentNum))
+                    if(this.nums.length === 1) {
+                        this.operator = e
+                        this.num1 = this.nums[0]
+                    } else if(this.nums.length === 2 && this.firstEquals === true) {
+                        this.currentNumCheck = true
+                        this.num1 = this.nums[this.nums.length-2]
+                        this.num2 = this.nums[this.nums.length-1]
+                        const requestData = {
+                            num1: this.num1,
+                            num2: this.num2,
+                            operator: this.operator
+                        }
+                        axios.post('/calculate', requestData)
+                            .then(response => {
+                                  console.log('API response:', response.data);
+                                  this.response = response.data
+                                  this.num1 = response.data.result
+                                  this.nums.push(response.data.result)
+                                  this.currentNum = response.data.result
+                            })
+                            .catch(error => {
+                                  console.error('Error sending data:', error);
+                            });
+                        this.operator = e
+                    } else if(this.firstEquals === false) {
+                        this.num1 = Number(this.currentNum)
+                        this.operator = e
+                        this.currentNum = ""
+                    } else {
+                        this.currentNumCheck = true
+                        this.num2 = Number(this.currentNum)
+                        const requestData = {
+                            num1: this.num1,
+                            num2: this.num2,
+                            operator: this.operator
+                        }
+                        axios.post('/calculate', requestData)
+                            .then(response => {
+                                  console.log('API response:', response.data);
+                                  this.response = response.data
+                                  this.num1 = this.response.result
+                                  this.nums.push(response.data.result)
+                                  this.currentNum = response.data.result
+                            })
+                            .catch(error => {
+                                  console.error('Error sending data:', error);
+                            });
+                        this.operator = e
+                    }
+                    this.operationCounter++
+                    this.currentNum = ''
+                    console.log(this.nums)
+                    this.firstEquals = true
+                },
+                onEquals() {
+                    if(this.firstEquals) {
+                        this.num2 = Number(this.currentNum)
+                        const requestData = {
+                            num1: this.num1,
+                            num2: this.num2,
+                            operator: this.operator
+                        }
+                        axios.post('/calculate', requestData)
+                            .then(response => {
+                                  console.log('API response:', response.data);
+                                  this.currentNum = response.data.result
+                                  this.num1 = response.data.result
+                            })
+                            .catch(error => {
+                                  console.error('Error sending data:', error);
+                            });
+                        this.firstEquals = false
+                    } else {
+                        const requestData = {
+                            num1: this.num1,
+                            num2: this.num2,
+                            operator: this.operator
+                        }
+                        axios.post('/calculate', requestData)
+                            .then(response => {
+                                  console.log('API response:', response.data);
+                                  this.currentNum = response.data.result
+                                  this.num1 = response.data.result
+                            })
+                            .catch(error => {
+                                  console.error('Error sending data:', error);
+                            });
+                        }
+                    }
+                },
+            /*methods: {
                 getHistory() {
                     axios.get('/history')
                         .then(response => {
@@ -275,13 +393,13 @@
                         console.log("On Second Num: ", this.onSecondNum)
                         console.log("Equals Api Called: ", this.equalsApiCalled)
                     } else {
-                        /*if(this.equalsApiCalled === true) {
-                            this.num2 = 0
-                            this.equalsApiCalled = false
-                        } else {
-                            this.num2 = Number(this.currentNum)
-                            this.equalsApiCalled = false
-                        }*/
+                        //if(this.equalsApiCalled === true) {
+                            //this.num2 = 0
+                            //this.equalsApiCalled = false
+                        //} else {
+                            //this.num2 = Number(this.currentNum)
+                            //this.equalsApiCalled = false
+                        //}
                         if(this.operator != '') {
                             this.num1 = Number(this.currentNum)
                         } else {
@@ -322,18 +440,18 @@
                             })
 
                     }
-                    /*const requestData = { 
-                        num1: this.num1,
-                        num2: this.num2,
-                        operator: this.operator
-                    }
-                    axios.post('/calculate', requestData)
-                        .then(response => {
-                            console.log('API response:', response.data);
-                        })
-                        .catch(error => {
-                            console.error('Error sending data:', error);
-                        });*/
+                    //const requestData = { 
+                        //num1: this.num1,
+                        //num2: this.num2,
+                        //operator: this.operator
+                    //}
+                    //axios.post('/calculate', requestData)
+                        //.then(response => {
+                            //console.log('API response:', response.data);
+                        //})
+                        //.catch(error => {
+                            //console.error('Error sending data:', error);
+                        //});
                     this.currentNum = ''
                 },
                 onClearClick() {
@@ -483,13 +601,13 @@
                             console.log("Equals Api Called: ", this.equalsApiCalled)
                         }
                     }
-                    /*const requestData = { 
-                        num1: this.num1,
-                        num2: this.num2,
-                        operator: this.operator
-                    }*/
+                    //const requestData = { 
+                        //num1: this.num1,
+                        //num2: this.num2,
+                        //operator: this.operator
+                    //}
                 }
-            }
+            }*/
         });
     </script>
 </body>
