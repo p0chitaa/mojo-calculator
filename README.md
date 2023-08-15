@@ -1,5 +1,5 @@
 # mojo-calculator
-just a quick little calculator in mojolicious
+just a (not so) quick little calculator in mojolicious
 
 > take a peek into `calculator` for the full project,, `form-calculator.pl` is just a little test
 
