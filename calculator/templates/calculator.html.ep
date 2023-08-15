@@ -226,7 +226,7 @@
                 history: {},
                 historyDisplay: "",
             },
-            /*mounted() {
+            mounted() {
                 axios.get('/history')
                     .then(response => {
                           this.history = response.data
@@ -240,7 +240,7 @@
                           }
                           console.log(this.historyDisplay)
                     })
-            },*/
+            },
             methods: {
                 onNumClick(e) {
                     if(this.currentNumCheck === false) {
@@ -289,6 +289,19 @@
                             .catch(error => {
                                   console.error('Error sending data:', error);
                             });
+                        axios.get('/history')
+                            .then(response => {
+                                this.history = response.data
+                                console.log(this.history)
+                                for (const property in this.history) {
+                                    let num1 = this.history[property].Num1
+                                    let num2 = this.history[property].Num2
+                                    let operator = this.history[property].Operator
+                                    let result = this.history[property].Result
+                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                }
+                                console.log(this.historyDisplay)
+                            })
                         this.operator = e
                     } else if(this.firstEquals === false) {
                         this.num1 = Number(this.currentNum)
@@ -313,6 +326,19 @@
                             .catch(error => {
                                   console.error('Error sending data:', error);
                             });
+                        axios.get('/history')
+                            .then(response => {
+                                this.history = response.data
+                                console.log(this.history)
+                                for (const property in this.history) {
+                                    let num1 = this.history[property].Num1
+                                    let num2 = this.history[property].Num2
+                                    let operator = this.history[property].Operator
+                                    let result = this.history[property].Result
+                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                }
+                                console.log(this.historyDisplay)
+                            })
                         this.operator = e
                     }
                     this.operationCounter++
@@ -337,6 +363,19 @@
                             .catch(error => {
                                   console.error('Error sending data:', error);
                             });
+                        axios.get('/history')
+                            .then(response => {
+                                this.history = response.data
+                                console.log(this.history)
+                                for (const property in this.history) {
+                                    let num1 = this.history[property].Num1
+                                    let num2 = this.history[property].Num2
+                                    let operator = this.history[property].Operator
+                                    let result = this.history[property].Result
+                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                }
+                                console.log(this.historyDisplay)
+                            })
                         this.firstEquals = false
                     } else {
                         const requestData = {
@@ -353,6 +392,19 @@
                             .catch(error => {
                                   console.error('Error sending data:', error);
                             });
+                        axios.get('/history')
+                            .then(response => {
+                                this.history = response.data
+                                console.log(this.history)
+                                for (const property in this.history) {
+                                    let num1 = this.history[property].Num1
+                                    let num2 = this.history[property].Num2
+                                    let operator = this.history[property].Operator
+                                    let result = this.history[property].Result
+                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                }
+                                console.log(this.historyDisplay)
+                            })
                         }
                     }
                 },
