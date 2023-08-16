@@ -1,0 +1,73 @@
+%= javascript 'https://unpkg.com/vue/dist/vue.min.js'
+%= javascript 'https://unpkg.com/axios/dist/axios.min.js'
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        body {
+            margin: 0;
+            position: absolute;
+            background-color: rgba(220, 220, 220);
+            color: rgba(240, 240, 240, 0.8);
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        input {
+            height: 50px;
+            width: 200px;
+            border-radius: 15px;
+            box-shadow: none;
+            text-align: center;
+            border-style: solid;
+            border-color: black;
+            border-width: 1px;
+            font-family: 'Inter', sans-serif;
+        }
+        #login-box {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #login-button {
+            height: 40px;
+            font-family: 'Inter', sans-serif;
+            border-style: solid;
+            border-radius:15px;
+            background-color: #3f51b5;
+            color: white;
+            transition-duration: 0.4s;
+        }
+        #login-button:hover {
+            background-color: hsl(231, 90%, 65%);
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+        #login-button:active {
+            background-color: #3f51b5
+        }
+        #error {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        % if (flash('error')) {
+          <p id="error"><%= flash('error') %></p>
+        % }
+        <form action="<%= url_for('/login') %>" method="post" id="login-box">
+            <input name="username" type="text" placeholder="Username"/>
+            <input name="password" type="password" placeholder="Password"/>
+            <button type="submit" id="login-button">LOGIN</button>
+        </form>
+    </div>
+</body>
+</html>

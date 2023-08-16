@@ -282,6 +282,7 @@
                             .then(response => {
                                   console.log('API response:', response.data);
                                   this.response = response.data
+                                  this.historyDisplay = this.historyDisplay.concat(this.num1, " ", this.operator, " ", this.num2, " = ", response.data.result, "\n\n")
                                   this.num1 = response.data.result
                                   this.nums.push(response.data.result)
                                   this.currentNum = response.data.result
@@ -298,7 +299,6 @@
                                     let num2 = this.history[property].Num2
                                     let operator = this.history[property].Operator
                                     let result = this.history[property].Result
-                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
                                 }
                                 console.log(this.historyDisplay)
                             })
@@ -319,6 +319,7 @@
                             .then(response => {
                                   console.log('API response:', response.data);
                                   this.response = response.data
+                                  this.historyDisplay = this.historyDisplay.concat(this.num1, " ", this.operator, " ", this.num2, " = ", response.data.result, "\n\n")
                                   this.num1 = this.response.result
                                   this.nums.push(response.data.result)
                                   this.currentNum = response.data.result
@@ -335,7 +336,6 @@
                                     let num2 = this.history[property].Num2
                                     let operator = this.history[property].Operator
                                     let result = this.history[property].Result
-                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
                                 }
                                 console.log(this.historyDisplay)
                             })
@@ -358,6 +358,7 @@
                             .then(response => {
                                   console.log('API response:', response.data);
                                   this.currentNum = response.data.result
+                                  this.historyDisplay = this.historyDisplay.concat(this.num1, " ",  this.operator, " ", this.num2, " = ", response.data.result, "\n\n")
                                   this.num1 = response.data.result
                             })
                             .catch(error => {
@@ -371,11 +372,11 @@
                                     let num1 = this.history[property].Num1
                                     let num2 = this.history[property].Num2
                                     let operator = this.history[property].Operator
-                                    let result = this.history[property].Result
-                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
+                                    let result = this.history[property].Result   
                                 }
                                 console.log(this.historyDisplay)
                             })
+                        this.currentNumCheck = true
                         this.firstEquals = false
                     } else {
                         const requestData = {
@@ -387,6 +388,7 @@
                             .then(response => {
                                   console.log('API response:', response.data);
                                   this.currentNum = response.data.result
+                                  this.historyDisplay = this.historyDisplay.concat(this.num1, " ", this.operator, " ", this.num2, " = ", response.data.result, "\n\n") 
                                   this.num1 = response.data.result
                             })
                             .catch(error => {
@@ -401,10 +403,10 @@
                                     let num2 = this.history[property].Num2
                                     let operator = this.history[property].Operator
                                     let result = this.history[property].Result
-                                    this.historyDisplay = this.historyDisplay.concat(num1, " ", operator, " ", num2, " = ", result, "\n\n")
                                 }
                                 console.log(this.historyDisplay)
                             })
+                        this.currentNumCheck = true
                         }
                     }
                 },
